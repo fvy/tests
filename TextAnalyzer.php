@@ -16,9 +16,15 @@ class TextAnalyzer
     public function getMostUsedWords(string $text): ?array
     {
         $result = [];
-        $words = $this->splitWords($text);
-        foreach ($words as $index => $word) {
-            $result[mb_strtoupper($word)]++;
+        $words = $this->splitTextInWords($text);
+
+        foreach ($words as $word) {
+
+            $word = mb_strtoupper($word);
+
+            !isset($result[$word])
+                ? $result[$word] = 1
+                : $result[$word]++;
         }
 
         arsort($result);
@@ -31,7 +37,7 @@ class TextAnalyzer
      * @param string $text
      * @return array
      */
-    private function splitWords(string $text): array
+    private function splitTextInWords(string $text): array
     {
         preg_match_all('#\w+#imu', $text, $matches);
 
